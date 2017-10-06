@@ -1,0 +1,42 @@
+@import url("fonts.css");
+
+body {
+  color: #737373;
+  font-family: "raleway-medium", serif;
+  text-align: center;
+}
+
+h1 {
+  color: #252525;
+  font-size: 3em;
+}
+
+input {
+  height: 2em;
+  margin: 0 0.5em;
+}
+
+button {
+  background: #d8d8d8;
+  border: none;
+  border-radius: 1000em;
+  color: #252525;
+  cursor: pointer;
+  font-size: 1em;
+  height: 2em;
+  margin: 0 0.5em;
+  padding: 0 1em;
+  transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+  background: gray;
+  color: white;
+}
+
+.center-div {
+  text-align: left;
+  width: 50%;
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
