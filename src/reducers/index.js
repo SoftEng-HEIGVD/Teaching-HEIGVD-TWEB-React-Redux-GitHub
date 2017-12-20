@@ -4,6 +4,8 @@ import {
   INVALIDATE_REPOSITORY,
   REQUEST_PULL_REQUESTS,
   RECEIVE_PULL_REQUESTS,
+  GENERATE_ERROR_MESSAGE,
+  RESET_ERROR_MESSAGE,
 } from '../actions/index';
 
 function selectedRepository(state = 'reactjs/redux', action) {
@@ -27,11 +29,13 @@ function pullRequests(
     case INVALIDATE_REPOSITORY:
       return Object.assign({}, state, {
         didInvalidate: true,
+        error: '',
       });
     case REQUEST_PULL_REQUESTS:
       return Object.assign({}, state, {
         isFetching: true,
         didInvalidate: false,
+        error: '',
       });
     case RECEIVE_PULL_REQUESTS:
       return Object.assign({}, state, {
@@ -39,6 +43,16 @@ function pullRequests(
         didInvalidate: false,
         items: action.pullRequests,
         lastUpdated: action.receivedAt,
+        error: '',
+      });
+    case GENERATE_ERROR_MESSAGE:
+      return Object.assign({}, state, {
+        isFetching: false,
+        error: action.error,
+      });
+    case RESET_ERROR_MESSAGE:
+      return Object.assign({}, state, {
+        error: '',
       });
     default:
       return state;
@@ -50,6 +64,8 @@ function pullRequestsByRepository(state = {}, action) {
     case INVALIDATE_REPOSITORY:
     case RECEIVE_PULL_REQUESTS:
     case REQUEST_PULL_REQUESTS:
+    case GENERATE_ERROR_MESSAGE:
+    case RESET_ERROR_MESSAGE:
       return Object.assign({}, state, {
         [action.repository]: pullRequests(state[action.repository], action),
       });

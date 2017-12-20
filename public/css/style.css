@@ -4,6 +4,7 @@ body {
   color: #737373;
   font-family: "raleway-medium", serif;
   text-align: center;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 h1 {
@@ -11,12 +12,21 @@ h1 {
   font-size: 3em;
 }
 
-input {
-  height: 2em;
-  margin: 0 0.5em;
+a {
+  color: #0087cc;
+  transition: all 0.3s;
 }
 
-button {
+a:hover {
+  color: #ff7b29;
+}
+
+input, select {
+  height: 2em;
+  margin: 0 1em;
+}
+
+button:not(.tablinks) {
   background: #d8d8d8;
   border: none;
   border-radius: 1000em;
@@ -29,8 +39,8 @@ button {
   transition: all 0.3s ease-in-out;
 }
 
-button:hover {
-  background: gray;
+button:hover, .react-tabs__tab:hover {
+  background-color: gray;
   color: white;
 }
 
@@ -39,4 +49,51 @@ button:hover {
   width: 50%;
   margin-left: 50%;
   transform: translateX(-50%);
+}
+
+.lastUpdatedElements {
+  margin: 2.5em 0 1.5em 0;
+}
+
+ /* Style the tabs */
+.react-tabs__tab-list {
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+/* Style the buttons inside the tabs */
+.react-tabs__tab {
+  background-color: #f1f1f1;
+  border: none;
+  color: black;
+  cursor: pointer;
+  display: inline-block;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+.react-tabs__tab--selected {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.react-tabs__tab-panel--selected {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+  -webkit-animation: fadeEffect 1s;
+  animation: fadeEffect 0.5s; /* Fading effect takes 0.5 second */
+}
+
+@-webkit-keyframes fadeEffect {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes fadeEffect {
+  from {opacity: 0;}
+  to {opacity: 1;}
 }

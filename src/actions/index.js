@@ -5,6 +5,8 @@ export const REQUEST_PULL_REQUESTS = 'REQUEST_PULL_REQUESTS';
 export const RECEIVE_PULL_REQUESTS = 'RECEIVE_PULL_REQUESTS';
 export const SELECT_REPOSITORY = 'SELECT_REPOSITORY';
 export const INVALIDATE_REPOSITORY = 'INVALIDATE_REPOSITORY';
+export const GENERATE_ERROR_MESSAGE = 'GENERATE_ERROR_MESSAGE';
+export const RESET_ERROR_MESSAGE = 'RESET_ERROR_MESSAGE';
 
 export function selectRepository(repository) {
   return {
@@ -16,6 +18,22 @@ export function selectRepository(repository) {
 export function invalidateRepository(repository) {
   return {
     type: INVALIDATE_REPOSITORY,
+    repository,
+  };
+}
+
+export function generateErrorMessage(repository, error) {
+  return {
+    type: GENERATE_ERROR_MESSAGE,
+    repository,
+    error: error || 'Something bad happened.',
+  };
+}
+
+// Resets the currently visible error message.
+export function resetErrorMessage(repository) {
+  return {
+    type: RESET_ERROR_MESSAGE,
     repository,
   };
 }
@@ -50,17 +68,20 @@ function fetchPullRequests(repository, maximumNumberOfPages) {
         .get(pageUrl)
         .auth(username, token)
         .set('Accept', 'application/vnd.github.v3+json')
+        .on('error', (error) => {
+          dispatch(generateErrorMessage(repository, error.message));
+        })
         .then((success, failure) => {
           if (failure) {
-            throw failure;
-          }
-
-          pullRequests = pullRequests.concat(JSON.parse(success.text));
-
-          if (pageIndex < maximumNumberOfPages - 1 && success.links.next) {
-            fetchPullRequestsPage(success.links.next, pageIndex + 1);
+            dispatch(generateErrorMessage(repository, failure));
           } else {
-            dispatch(receivePullRequests(repository, pullRequests));
+            pullRequests = pullRequests.concat(JSON.parse(success.text));
+
+            if (pageIndex < maximumNumberOfPages - 1 && success.links.next) {
+              fetchPullRequestsPage(success.links.next, pageIndex + 1);
+            } else {
+              dispatch(receivePullRequests(repository, pullRequests));
+            }
           }
         });
     }
